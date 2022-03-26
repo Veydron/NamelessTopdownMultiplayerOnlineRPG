@@ -95,7 +95,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 6201568170063779132}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkObserver: {fileID: 0}
-  _prefabId: -1
+  _prefabId: 5
   _scenePathHash: 0
   _sceneId: 0
   _sceneNetworkObjects:
@@ -136,7 +136,7 @@ CharacterController:
   m_GameObject: {fileID: 6201568170063779132}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
@@ -160,7 +160,7 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 2722440310381880487}
   _networkObjectCache: {fileID: 2722440310381880487}
-  MoveSpeed: 5
+  moveSpeed: 5
 --- !u!114 &7409567563685113977
 MonoBehaviour:
   m_ObjectHideFlags: 0
