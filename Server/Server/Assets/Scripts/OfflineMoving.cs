@@ -7,17 +7,13 @@ public class OfflineMoving : MonoBehaviour
     private Pathfinding pathfinding;
     public Vector3 targetPosition;
     private List<Vector3> waypoints;
-    private int waypointIndex;
-
-    private bool isMoving;
+    private int waypointIndex = 0;
+    private bool isMoving = false;
     
     // Start is called before the first frame update
     void Start()
     {
         pathfinding = new Pathfinding(20,20);
-        waypointIndex = 0;
-        isMoving = false;
-
     }
 
     // Update is called once per frame
@@ -71,7 +67,8 @@ public class OfflineMoving : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position,waypoints[waypointIndex], 5f * Time.deltaTime); 
 
-        if (transform.position == waypoints[waypointIndex]) 
+        //if (transform.position == waypoints[waypointIndex])
+        if (Vector3.Distance(transform.position, waypoints[waypointIndex]) < 0.01f) 
         {
             isMoving =  false;
 
