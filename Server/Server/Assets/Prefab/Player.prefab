@@ -163,4 +163,4 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 2722440310381880487}
   targetPosition: {x: 0, y: 0, z: 0}
   isMoving: 0
-  _moveRate: 5
+  _moveRate: 1

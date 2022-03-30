@@ -12,7 +12,6 @@ namespace FishNet.Example.Prediction.Transforms
         private Pathfinding pathfinding;
         public Vector3 targetPosition;
         private List<Vector3> waypoints;
-        public bool isMoving = false;
         private int waypointIndex = 0;
         void Start()
         {
@@ -20,7 +19,7 @@ namespace FishNet.Example.Prediction.Transforms
         }
         void Update()
         {
-            if (Input.GetMouseButtonUp(0)&& base.IsOwner)
+            if (Input.GetMouseButton(0) && base.IsOwner)
             {
                 SetTargetPosition();
                 SearchPath();
@@ -99,7 +98,7 @@ namespace FishNet.Example.Prediction.Transforms
         /// </summary>
         [Tooltip("How many units to move per second.")]
         [SerializeField]
-        private float _moveRate = 5f;
+        private float _moveRate = 1f;
         #endregion
 
         #region Private.
