@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5646394849918397077}
   - component: {fileID: 2722440310381880487}
   - component: {fileID: -918143109187944614}
-  - component: {fileID: -8134065757703464785}
+  - component: {fileID: -7192530759526934192}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -103,8 +103,8 @@ MonoBehaviour:
   _sceneNetworkObjects:
   - {fileID: 2722440310381880487}
   _networkBehaviours:
-  - {fileID: 0}
   - {fileID: -918143109187944614}
+  - {fileID: -7192530759526934192}
   SceneTransformProperties:
     Position: {x: 0, y: 0.29, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 1}
@@ -123,12 +123,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 0
   _addedNetworkObject: {fileID: 2722440310381880487}
   _networkObjectCache: {fileID: 2722440310381880487}
   _compress: 1
   _synchronizeParent: 0
-  _interpolation: 2
+  _interpolation: 5
   _extrapolation: 0
   _enableTeleport: 0
   _teleportThreshold: 1
@@ -146,7 +146,7 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
---- !u!114 &-8134065757703464785
+--- !u!114 &-7192530759526934192
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,7 +155,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6201568170063779132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099db4bc5c5a0ef4bb9f3d8ecc253504, type: 3}
+  m_Script: {fileID: 11500000, guid: bcb4251be808d7f4e9a1276e9f628b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 2722440310381880487}
+  _networkObjectCache: {fileID: 2722440310381880487}
   targetPosition: {x: 0, y: 0, z: 0}
+  isMoving: 0
+  _moveRate: 5

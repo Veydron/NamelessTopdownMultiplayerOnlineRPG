@@ -1,10 +1,59 @@
-﻿using FishNet;
+﻿using System.Collections.Generic;
+using FishNet;
 using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
 
+namespace FishNet.Example.Prediction.Transforms
+{
     public class TransformPrediction : NetworkBehaviour
     {
+
+        private Pathfinding pathfinding;
+        public Vector3 targetPosition;
+        private List<Vector3> waypoints;
+        public bool isMoving = false;
+        private int waypointIndex = 0;
+        void Start()
+        {
+            pathfinding = new Pathfinding(30, 30);
+        }
+        void Update()
+        {
+            if (Input.GetMouseButtonUp(0)&& base.IsOwner)
+            {
+                SetTargetPosition();
+                SearchPath();
+            }
+        }
+        void SetTargetPosition()
+        {
+            Plane plane = new Plane(Vector3.up, transform.position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float point = 0f;
+            if (plane.Raycast(ray, out point))
+            {
+                targetPosition = ray.GetPoint(point);
+            }
+        }
+        void SearchPath()
+        {
+            if (waypoints != null)
+            {
+                if (waypointIndex > waypoints.Count-1){
+                    waypointIndex = waypoints.Count-1;
+                }
+                waypoints = pathfinding.FindPath(waypoints[waypointIndex], targetPosition);
+            }
+            else
+            {
+                waypoints = pathfinding.FindPath(transform.position, targetPosition);
+            }
+
+            waypointIndex = 0;
+        }
+
+
         /// <summary>
         /// Data on how to move.
         /// This is processed locally as well sent to the server for processing.
@@ -104,7 +153,6 @@ using UnityEngine;
                  * are sent a predetermined amount of times. It's important you
                  * call Move whether your data is default or not. FishNet will
                  * automatically determine how to send the data, and run the logic. */
-                //Debug.Log("Client Move");
                 Move(md, false);
             }
             if (base.IsServer)
@@ -114,7 +162,6 @@ using UnityEngine;
                  * You may also run any sanity checks on the input as demonstrated
                  * in the method. */
                 Move(default, true);
-                //Debug.Log("Server Move");
                 /* After the server has processed input you will want to send
                  * the result back to clients. You are welcome to skip
                  * a few sends if you like, eg only send every few ticks.
@@ -146,9 +193,33 @@ using UnityEngine;
         private void CheckInput(out MoveData md)
         {
             md = default;
+ 
+            if (waypoints == null){
+                return;
+            }
+            Debug.Log("A) Waypoint: " + waypoints);
+            Debug.Log("A) Indexnumber: " + waypointIndex);
+            Debug.Log("A) Waypoints.Count: " + waypoints.Count);
+            if (waypointIndex > waypoints.Count -1){
+                Debug.Log("B) Indexnumber: " + waypointIndex);
+                Debug.Log("B) Waypoints.Count: " + waypoints.Count);
+                Debug.Log("B returns");
+                return;
+            }
+            Debug.Log("C) Waypoint@index: " + waypoints[waypointIndex]);
+            float distance = DistanceAB();
 
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
+            if (distance < 0.1f){
+                waypointIndex = waypointIndex + 1;
+                if (waypointIndex > waypoints.Count-1){
+                    return;
+                }
+            }
+
+            Vector2 normalizedDirections = NormalizedDirection();
+            Debug.Log("C) normalized Vector: " + normalizedDirections);
+            float horizontal = normalizedDirections.x;
+            float vertical = normalizedDirections.y;
 
             //No input to send.
             if (horizontal == 0f && vertical == 0f)
@@ -161,6 +232,24 @@ using UnityEngine;
                 Vertical = vertical
             };
         }
+
+        private float DistanceAB()
+        {
+            Vector2 startVector = new Vector2(transform.position.x, transform.position.z);
+            Vector2 endVector = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
+            float distance = Vector2.Distance(startVector, endVector);
+            return distance;
+        }
+
+        private Vector2 NormalizedDirection()
+        {
+            Vector2 startVector = new Vector2(transform.position.x, transform.position.z);
+            Vector2 endVector = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
+            Vector2 normalized = endVector - startVector;
+            
+            return normalized.normalized;
+        }
+    
 
         /// <summary>
         /// Replicate attribute indicates the data is being sent from the client to the server.
@@ -236,3 +325,6 @@ using UnityEngine;
 
 
     }
+
+
+}

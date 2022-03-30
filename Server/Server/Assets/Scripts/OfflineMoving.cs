@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
-public class OfflineMoving : MonoBehaviour
+public class OfflineMoving : NetworkBehaviour
 {
     private Pathfinding pathfinding;
     public Vector3 targetPosition;
     private List<Vector3> waypoints;
-    private int waypointIndex = 0;
     public bool isMoving = false;
+    private int waypointIndex = 0;
     void Start(){
         pathfinding = new Pathfinding(20,20);
     }
