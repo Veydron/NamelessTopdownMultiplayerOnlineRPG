@@ -13,13 +13,14 @@ namespace FishNet.Example.Prediction.Transforms
         public Vector3 targetPosition;
         private List<Vector3> waypoints;
         private int waypointIndex = 0;
+        public float targetDistanceCheck = 0.2f;
         void Start()
         {
             pathfinding = new Pathfinding(30, 30);
         }
         void Update()
         {
-            if (Input.GetMouseButton(0) && base.IsOwner)
+            if (Input.GetMouseButtonUp(0) && base.IsOwner)
             {
                 SetTargetPosition();
                 SearchPath();
@@ -98,7 +99,7 @@ namespace FishNet.Example.Prediction.Transforms
         /// </summary>
         [Tooltip("How many units to move per second.")]
         [SerializeField]
-        private float _moveRate = 1f;
+        private float _moveRate = 5f;
         #endregion
 
         #region Private.
@@ -196,19 +197,12 @@ namespace FishNet.Example.Prediction.Transforms
             if (waypoints == null){
                 return;
             }
-            Debug.Log("A) Waypoint: " + waypoints);
-            Debug.Log("A) Indexnumber: " + waypointIndex);
-            Debug.Log("A) Waypoints.Count: " + waypoints.Count);
             if (waypointIndex > waypoints.Count -1){
-                Debug.Log("B) Indexnumber: " + waypointIndex);
-                Debug.Log("B) Waypoints.Count: " + waypoints.Count);
-                Debug.Log("B returns");
                 return;
             }
-            Debug.Log("C) Waypoint@index: " + waypoints[waypointIndex]);
             float distance = DistanceAB();
 
-            if (distance < 0.1f){
+            if (distance < targetDistanceCheck){
                 waypointIndex = waypointIndex + 1;
                 if (waypointIndex > waypoints.Count-1){
                     return;
@@ -216,7 +210,6 @@ namespace FishNet.Example.Prediction.Transforms
             }
 
             Vector2 normalizedDirections = NormalizedDirection();
-            Debug.Log("C) normalized Vector: " + normalizedDirections);
             float horizontal = normalizedDirections.x;
             float vertical = normalizedDirections.y;
 
