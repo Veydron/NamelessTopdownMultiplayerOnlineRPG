@@ -37,7 +37,7 @@ public class CameraController : NetworkBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             float timeSinceLastClick = Time.time - lastClickTime;
-            //Debug.Log(timeSinceLastClick);
+
 
             if (timeSinceLastClick <= DOUBLE_CLICK_TIME)
             {
@@ -80,7 +80,7 @@ public class CameraController : NetworkBehaviour
     void Drehen()
     {   
         //OnMouseEnter(cursorRotation);
-        cfl.m_XAxis.m_MaxSpeed = 2.5f;
+        cfl.m_XAxis.m_MaxSpeed = 2f;
     }
 
     void Scrollen()

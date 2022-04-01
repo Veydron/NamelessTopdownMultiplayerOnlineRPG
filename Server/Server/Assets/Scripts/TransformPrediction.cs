@@ -14,16 +14,22 @@ namespace FishNet.Example.Prediction.Transforms
         private List<Vector3> waypoints;
         private int waypointIndex = 0;
         public float targetDistanceCheck = 0.2f;
+        private PlayerAnimation _playerAnimation;
+        public bool isMoving = false;
         void Start()
         {
             pathfinding = new Pathfinding(30, 30);
         }
         void Update()
         {
-            if (Input.GetMouseButtonUp(0) && base.IsOwner)
+            if (Input.GetMouseButton(0) && base.IsOwner)
             {
                 SetTargetPosition();
                 SearchPath();
+            }
+            if (Input.GetKeyDown(KeyCode.Space) && base.IsOwner)
+            {
+                _playerAnimation.Jump();
             }
         }
         void SetTargetPosition()
@@ -121,6 +127,7 @@ namespace FishNet.Example.Prediction.Transforms
              * to subscrube in OnStartServer/Client using base.TimeManager. */
             InstanceFinder.TimeManager.OnTick += TimeManager_OnTick;
             InstanceFinder.TimeManager.OnUpdate += TimeManager_OnUpdate;
+            _playerAnimation = GetComponent<PlayerAnimation>();
         }
 
         private void OnDestroy()
@@ -212,10 +219,16 @@ namespace FishNet.Example.Prediction.Transforms
             Vector2 normalizedDirections = NormalizedDirection();
             float horizontal = normalizedDirections.x;
             float vertical = normalizedDirections.y;
+            /*
+            isMoving = (horizontal != 0f || vertical != 0f );
+            _playerAnimation.SetMoving(isMoving);
 
-            //No input to send.
-            if (horizontal == 0f && vertical == 0f)
+            if (isMoving == false){
+                Debug.Log("isMoving = False");
                 return;
+            }
+            Debug.Log("isMoving = True");
+            */
 
             //Make movedata with input.
             md = new MoveData()
@@ -298,6 +311,11 @@ namespace FishNet.Example.Prediction.Transforms
         {
             Vector3 move = new Vector3(md.Horizontal, 0f, md.Vertical);
             transform.position += (move * _moveRate * delta);
+            if (move != Vector3.zero){     
+                transform.rotation = Quaternion.LookRotation(move);
+            }
+            isMoving = (md.Horizontal != 0f || md.Vertical != 0f );
+            _playerAnimation.SetMoving(isMoving);
         }
 
         /// <summary>
