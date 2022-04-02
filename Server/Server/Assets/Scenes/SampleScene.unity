@@ -1542,7 +1542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fdaae44044276a49a52229c1597e33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tickRate: 60
+  _tickRate: 30
   _physicsMode: 1
   _maximumBufferedInputs: 5
   _targetBufferedInputs: 2

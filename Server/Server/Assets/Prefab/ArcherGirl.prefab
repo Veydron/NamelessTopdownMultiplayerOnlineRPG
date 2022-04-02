@@ -2032,9 +2032,10 @@ GameObject:
   - component: {fileID: 3241074286648262271}
   - component: {fileID: 1049786998509700907}
   - component: {fileID: -2737309773375283264}
+  - component: {fileID: -380353553296961894}
   m_Layer: 0
   m_Name: ArcherGirl
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2129,6 +2130,7 @@ MonoBehaviour:
   - {fileID: 3241074286648262268}
   - {fileID: 3241074286648262271}
   - {fileID: 1049786998509700907}
+  - {fileID: -380353553296961894}
   SceneTransformProperties:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2188,6 +2190,7 @@ MonoBehaviour:
   targetPosition: {x: 0, y: 0, z: 0}
   targetDistanceCheck: 0.2
   isMoving: 0
+  isSitting: 0
   _moveRate: 6
 --- !u!114 &3241074286648262268
 MonoBehaviour:
@@ -2254,7 +2257,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a3faa22fba81f84db9bd30b7a25aef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 0
+--- !u!114 &-380353553296961894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241074286648262270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10a084303192174692e0b2936b5ace2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 3241074286648262267}
+  _networkObjectCache: {fileID: 3241074286648262267}
 --- !u!1 &3241074286664332062
 GameObject:
   m_ObjectHideFlags: 0

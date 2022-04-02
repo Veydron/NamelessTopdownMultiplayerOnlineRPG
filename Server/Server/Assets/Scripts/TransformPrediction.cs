@@ -3,6 +3,7 @@ using FishNet;
 using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
+using FishNet.Object.Synchronizing;
 
 namespace FishNet.Example.Prediction.Transforms
 {
@@ -16,6 +17,10 @@ namespace FishNet.Example.Prediction.Transforms
         public float targetDistanceCheck = 0.2f;
         private PlayerAnimation _playerAnimation;
         public bool isMoving = false;
+        Vector2 normalizedDirections;
+
+        [SyncVar(Channel = Transporting.Channel.Reliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f)]
+        public bool isSitting = false;
         void Start()
         {
             pathfinding = new Pathfinding(30, 30);
@@ -207,6 +212,7 @@ namespace FishNet.Example.Prediction.Transforms
             if (waypointIndex > waypoints.Count -1){
                 return;
             }
+
             float distance = DistanceAB();
 
             if (distance < targetDistanceCheck){
@@ -216,9 +222,16 @@ namespace FishNet.Example.Prediction.Transforms
                 }
             }
 
-            Vector2 normalizedDirections = NormalizedDirection();
+            if (isSitting){
+                normalizedDirections = NormalizedDirection(targetPosition);
+            }
+            else{
+                normalizedDirections = NormalizedDirection(waypoints[waypointIndex]);
+            }
+
             float horizontal = normalizedDirections.x;
             float vertical = normalizedDirections.y;
+
             /*
             isMoving = (horizontal != 0f || vertical != 0f );
             _playerAnimation.SetMoving(isMoving);
@@ -246,14 +259,15 @@ namespace FishNet.Example.Prediction.Transforms
             return distance;
         }
 
-        private Vector2 NormalizedDirection()
+        private Vector2 NormalizedDirection(Vector3 end)
         {
             Vector2 startVector = new Vector2(transform.position.x, transform.position.z);
-            Vector2 endVector = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
+            Vector2 endVector = new Vector2(end.x, end.z);
             Vector2 normalized = endVector - startVector;
             
             return normalized.normalized;
         }
+
     
 
         /// <summary>
@@ -310,12 +324,22 @@ namespace FishNet.Example.Prediction.Transforms
         private void MoveWithData(MoveData md, float delta)
         {
             Vector3 move = new Vector3(md.Horizontal, 0f, md.Vertical);
-            transform.position += (move * _moveRate * delta);
+            if (isSitting){
+                transform.position += (Vector3.zero * _moveRate * delta);
+                isMoving = false;
+                waypoints = null; 
+            }
+            else{
+                transform.position += (move * _moveRate * delta);
+                isMoving = (md.Horizontal != 0f || md.Vertical != 0f );
+                _playerAnimation.SetMoving(isMoving); 
+            }
+           
             if (move != Vector3.zero){     
                 transform.rotation = Quaternion.LookRotation(move);
             }
-            isMoving = (md.Horizontal != 0f || md.Vertical != 0f );
-            _playerAnimation.SetMoving(isMoving);
+
+            
         }
 
         /// <summary>
