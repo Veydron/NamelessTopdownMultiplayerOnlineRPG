@@ -1297,7 +1297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3241074286231444195}
   m_Layer: 0
-  m_Name: Archer
+  m_Name: SpriteScriptAchse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2031,6 +2031,7 @@ GameObject:
   - component: {fileID: 3241074286648262268}
   - component: {fileID: 3241074286648262271}
   - component: {fileID: 1049786998509700907}
+  - component: {fileID: -2737309773375283264}
   m_Layer: 0
   m_Name: ArcherGirl
   m_TagString: Untagged
@@ -2241,6 +2242,19 @@ MonoBehaviour:
   _synchronizeInterval: 0.1
   _clientAuthoritative: 0
   _sendToOwner: 1
+--- !u!114 &-2737309773375283264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241074286648262270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a3faa22fba81f84db9bd30b7a25aef2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angle: 0
 --- !u!1 &3241074286664332062
 GameObject:
   m_ObjectHideFlags: 0
