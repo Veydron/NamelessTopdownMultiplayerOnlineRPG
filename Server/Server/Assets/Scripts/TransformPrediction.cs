@@ -18,13 +18,84 @@ namespace FishNet.Example.Prediction.Transforms
         private PlayerAnimation _playerAnimation;
         public bool isMoving = false;
         Vector2 normalizedDirections;
+        private Transform[] allchildren;
+        private GameObject Hair;
 
-        [SyncVar(Channel = Transporting.Channel.Reliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f)]
-        public bool isSitting = false;
+        private GameObject Face;
+
+        private GameObject HairSit;
+
+        private GameObject FaceSit;
+
+        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.Observers, SendRate = 0f)]
+        public bool isSitting;
+        public void SittingDown(bool Value)
+        {
+                ChangeObjectOnOff(Hair,!Value);
+                ChangeObjectOnOff(Face,!Value);
+                ChangeObjectOnOff(HairSit,Value);
+                ChangeObjectOnOff(FaceSit,Value);
+                isSitting = Value;
+                ChangeSit(Value);
+        }
+
+        [ObserversRpc(BufferLast = true, IncludeOwner = true)]
+        private void ChangeSit(bool Value)
+        {
+            if (allchildren == null)
+            {
+                Debug.Log("AllChildren Null error");
+                return;
+            }
+            allchildren[4].gameObject.SetActive(!Value);
+            allchildren[5].gameObject.SetActive(!Value);
+            allchildren[6].gameObject.SetActive(Value);
+            allchildren[7].gameObject.SetActive(Value);
+            isSitting = Value;
+        }
+
+        private void ChangeObjectOnOff(GameObject Obj, bool Value)
+        {
+            if (Obj != null)
+            {
+                Obj.SetActive(Value);    
+            }
+            
+        }
+
         void Start()
         {
-            pathfinding = new Pathfinding(30, 30);
+
         }
+
+        public override void OnStartNetwork()
+        {
+            base.OnStartNetwork();
+            
+            pathfinding = new Pathfinding(30, 30);
+
+            //Debug.Log("Child Count: " + transform.childCount);
+
+            allchildren = this.GetComponentsInChildren<Transform>();   
+        
+        //    for (int i = 0; i < allchildren.Length-1; i++){ 
+        //        Debug.Log(i + " = " + allchildren[i].name);
+        //    }
+        
+            Face = allchildren[4].gameObject;
+            Hair = allchildren[5].gameObject;
+            FaceSit = allchildren[6].gameObject;
+            HairSit = allchildren[7].gameObject;
+
+            //FaceSit.SetActive(false);
+            //HairSit.SetActive(false);
+
+        //  allchildren = null;
+
+            SittingDown(isSitting);
+        }
+
+
         void Update()
         {
             if (Input.GetMouseButton(0) && base.IsOwner)
@@ -328,11 +399,34 @@ namespace FishNet.Example.Prediction.Transforms
                 transform.position += (Vector3.zero * _moveRate * delta);
                 isMoving = false;
                 waypoints = null; 
+                _playerAnimation.SetMoving(isMoving);
+                //SittingDown(true);
+
+                if (Face != null)
+                {
+                    
+                }
+                else
+                {
+                    Debug.Log("A) Face IS null");
+                }
+
             }
             else{
                 transform.position += (move * _moveRate * delta);
                 isMoving = (md.Horizontal != 0f || md.Vertical != 0f );
                 _playerAnimation.SetMoving(isMoving); 
+                //SittingDown(false);
+
+                if (Face != null)
+                {
+                    
+                }
+                else
+                {
+                    Debug.Log("B) Face IS null");
+                }
+
             }
            
             if (move != Vector3.zero){     

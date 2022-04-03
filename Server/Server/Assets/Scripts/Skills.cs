@@ -15,7 +15,7 @@ public class Skills : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -24,18 +24,19 @@ public class Skills : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.S) && base.IsOwner)
             {
                 Sit();
-                _transformPrediction.isSitting = !_transformPrediction.isSitting;
+                //_transformPrediction.isSitting = !_transformPrediction.isSitting;
             }     
     }
 
     [ServerRpc(RequireOwnership = true)]
     private void Sit()
     {   
-        Debug.Log("Is Moving = " + _transformPrediction.isMoving);
+        //Debug.Log("Is Moving = " + _transformPrediction.isMoving);
         if (_transformPrediction.isMoving){
             return;
         }
-        _transformPrediction.isSitting = !_transformPrediction.isSitting;
+        //_transformPrediction.isSitting = !_transformPrediction.isSitting;
+        _transformPrediction.SittingDown(!_transformPrediction.isSitting);
         _animator.SetBool("Sit", _transformPrediction.isSitting);
     }
 
