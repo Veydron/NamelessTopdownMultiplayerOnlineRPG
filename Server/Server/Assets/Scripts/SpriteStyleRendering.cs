@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Example.Prediction.Transforms;
 using UnityEngine;
 using Cinemachine;
 
@@ -9,17 +10,24 @@ public class SpriteStyleRendering : MonoBehaviour
     private CinemachineFreeLook cfl;
     private float angle;
     private Transform RotationsAchse;
+    //Sprivate TransformPrediction _TP;
+    //private float rotationLookDirection = 0f;
+    //private float oldLookDirection = 0f;
 
 
     void Start()
     {
         c = Camera.main;
         cfl = c.GetComponent<CinemachineFreeLook>();
+        //_TP = this.GetComponent<TransformPrediction>();
     }
 
     void Update()
     {
+        //rotationLookDirection = transform.eulerAngles.y;
+        //Debug.Log("Rotation Look : " + rotationLookDirection);
         SetSpriteLook(this.gameObject);
+
     }
 
     private void SetSpriteLook(GameObject P)

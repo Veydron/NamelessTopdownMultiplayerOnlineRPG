@@ -27,16 +27,18 @@ namespace FishNet.Example.Prediction.Transforms
 
         private GameObject FaceSit;
 
+        private float oldLookDirection;
+
         [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.Observers, SendRate = 0f)]
         public bool isSitting;
         public void SittingDown(bool Value)
         {
-                ChangeObjectOnOff(Hair,!Value);
-                ChangeObjectOnOff(Face,!Value);
-                ChangeObjectOnOff(HairSit,Value);
-                ChangeObjectOnOff(FaceSit,Value);
-                isSitting = Value;
-                ChangeSit(Value);
+            ChangeObjectOnOff(Hair, !Value);
+            ChangeObjectOnOff(Face, !Value);
+            ChangeObjectOnOff(HairSit, Value);
+            ChangeObjectOnOff(FaceSit, Value);
+            isSitting = Value;
+            ChangeSit(Value);
         }
 
         [ObserversRpc(BufferLast = true, IncludeOwner = true)]
@@ -58,9 +60,9 @@ namespace FishNet.Example.Prediction.Transforms
         {
             if (Obj != null)
             {
-                Obj.SetActive(Value);    
+                Obj.SetActive(Value);
             }
-            
+
         }
 
         void Start()
@@ -71,17 +73,17 @@ namespace FishNet.Example.Prediction.Transforms
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
-            
+
             pathfinding = new Pathfinding(30, 30);
 
             //Debug.Log("Child Count: " + transform.childCount);
 
-            allchildren = this.GetComponentsInChildren<Transform>();   
-        
-        //    for (int i = 0; i < allchildren.Length-1; i++){ 
-        //        Debug.Log(i + " = " + allchildren[i].name);
-        //    }
-        
+            allchildren = this.GetComponentsInChildren<Transform>();
+
+            //    for (int i = 0; i < allchildren.Length-1; i++){ 
+            //        Debug.Log(i + " = " + allchildren[i].name);
+            //    }
+
             Face = allchildren[4].gameObject;
             Hair = allchildren[5].gameObject;
             FaceSit = allchildren[6].gameObject;
@@ -90,7 +92,7 @@ namespace FishNet.Example.Prediction.Transforms
             //FaceSit.SetActive(false);
             //HairSit.SetActive(false);
 
-        //  allchildren = null;
+            //  allchildren = null;
 
             SittingDown(isSitting);
         }
@@ -122,8 +124,9 @@ namespace FishNet.Example.Prediction.Transforms
         {
             if (waypoints != null)
             {
-                if (waypointIndex > waypoints.Count-1){
-                    waypointIndex = waypoints.Count-1;
+                if (waypointIndex > waypoints.Count - 1)
+                {
+                    waypointIndex = waypoints.Count - 1;
                 }
                 waypoints = pathfinding.FindPath(waypoints[waypointIndex], targetPosition);
             }
@@ -276,27 +279,33 @@ namespace FishNet.Example.Prediction.Transforms
         private void CheckInput(out MoveData md)
         {
             md = default;
- 
-            if (waypoints == null){
+
+            if (waypoints == null)
+            {
                 return;
             }
-            if (waypointIndex > waypoints.Count -1){
+            if (waypointIndex > waypoints.Count - 1)
+            {
                 return;
             }
 
             float distance = DistanceAB();
 
-            if (distance < targetDistanceCheck){
+            if (distance < targetDistanceCheck)
+            {
                 waypointIndex = waypointIndex + 1;
-                if (waypointIndex > waypoints.Count-1){
+                if (waypointIndex > waypoints.Count - 1)
+                {
                     return;
                 }
             }
 
-            if (isSitting){
+            if (isSitting)
+            {
                 normalizedDirections = NormalizedDirection(targetPosition);
             }
-            else{
+            else
+            {
                 normalizedDirections = NormalizedDirection(waypoints[waypointIndex]);
             }
 
@@ -335,11 +344,11 @@ namespace FishNet.Example.Prediction.Transforms
             Vector2 startVector = new Vector2(transform.position.x, transform.position.z);
             Vector2 endVector = new Vector2(end.x, end.z);
             Vector2 normalized = endVector - startVector;
-            
+
             return normalized.normalized;
         }
 
-    
+
 
         /// <summary>
         /// Replicate attribute indicates the data is being sent from the client to the server.
@@ -395,45 +404,132 @@ namespace FishNet.Example.Prediction.Transforms
         private void MoveWithData(MoveData md, float delta)
         {
             Vector3 move = new Vector3(md.Horizontal, 0f, md.Vertical);
-            if (isSitting){
+            if (isSitting)
+            {
                 transform.position += (Vector3.zero * _moveRate * delta);
                 isMoving = false;
-                waypoints = null; 
+                waypoints = null;
                 _playerAnimation.SetMoving(isMoving);
                 //SittingDown(true);
 
                 if (Face != null)
                 {
-                    
+
                 }
                 else
                 {
                     Debug.Log("A) Face IS null");
                 }
 
+                if (move != Vector3.zero)
+                {   
+                    move = new Vector3(md.Horizontal, 90f, md.Vertical);
+                    
+                    var rotationTemp = Quaternion.LookRotation(move);
+                    //HairSit.transform.rotation = Quaternion.LookRotation(move);
+                    //FaceSit.transform.rotation = Quaternion.LookRotation(move);
+
+                    
+                    float eulerAngleY = rotationTemp.eulerAngles.y;
+
+                    if (eulerAngleY > 0f && eulerAngleY < 22.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,0,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,0,0);
+                    }
+                    if (eulerAngleY > 22.5f && eulerAngleY < 67.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,45,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,45,0);
+                    }
+                    if (eulerAngleY > 67.5f && eulerAngleY < 112.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,90,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,90,0);
+                    }
+                    if (eulerAngleY > 112.5f && eulerAngleY < 157.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,135,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,135,0);
+                    }
+                    if (eulerAngleY > 157.5f && eulerAngleY < 202.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,180,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,180,0);
+                    }
+                    if (eulerAngleY > 202.5f && eulerAngleY < 247.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,225,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,225,0);
+                    }
+                    if (eulerAngleY > 247.5f && eulerAngleY < 292.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,270,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,270,0);
+                    }
+                    if (eulerAngleY > 292.5f && eulerAngleY < 337.5f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,315,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,315,0);
+                    }
+                    if (eulerAngleY > 337.5f && eulerAngleY < 360f)
+                    {
+                        HairSit.transform.rotation = Quaternion.Euler(-90,360,0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90,360,0);
+                    }
+                    
+
+                }
+
+                
+                //Test
+                float rotationLookDirection = HairSit.transform.eulerAngles.y;
+
+                if (oldLookDirection == 0)
+                {
+                    oldLookDirection = rotationLookDirection;
+                }
+                
+                if (oldLookDirection + 67.5f < rotationLookDirection)
+                {
+                    oldLookDirection = oldLookDirection + 45;
+                    transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                }
+                if (oldLookDirection - 67.5 > rotationLookDirection)
+                {
+                    oldLookDirection = oldLookDirection - 45f;
+                    transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                }
+                //TestEnd
+                
             }
-            else{
+
+            else
+            {
                 transform.position += (move * _moveRate * delta);
-                isMoving = (md.Horizontal != 0f || md.Vertical != 0f );
-                _playerAnimation.SetMoving(isMoving); 
+                isMoving = (md.Horizontal != 0f || md.Vertical != 0f);
+                _playerAnimation.SetMoving(isMoving);
                 //SittingDown(false);
 
                 if (Face != null)
                 {
-                    
+
                 }
                 else
                 {
                     Debug.Log("B) Face IS null");
                 }
 
-            }
-           
-            if (move != Vector3.zero){     
-                transform.rotation = Quaternion.LookRotation(move);
+                if (move != Vector3.zero)
+                {
+                    transform.rotation = Quaternion.LookRotation(move);
+                }
+
             }
 
-            
+
+
+
         }
 
         /// <summary>
@@ -448,7 +544,7 @@ namespace FishNet.Example.Prediction.Transforms
         private void Reconciliation(ReconcileData rd, bool asServer)
         {
             transform.position = rd.Position;
-            transform.rotation = rd.Rotation;
+            //transform.rotation = rd.Rotation;
         }
 
 
