@@ -19,4 +19,8 @@ public class PlayerAnimation : NetworkBehaviour
     {
         _animator.SetTrigger("Jump");
     }
+
+    private void Update() {
+        
+    }
 }

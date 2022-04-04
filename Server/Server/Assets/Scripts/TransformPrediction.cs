@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Prediction;
@@ -100,6 +100,8 @@ namespace FishNet.Example.Prediction.Transforms
 
         void Update()
         {
+
+
             if (Input.GetMouseButton(0) && base.IsOwner)
             {
                 SetTargetPosition();
@@ -109,6 +111,7 @@ namespace FishNet.Example.Prediction.Transforms
             {
                 _playerAnimation.Jump();
             }
+             
         }
         void SetTargetPosition()
         {
@@ -422,66 +425,66 @@ namespace FishNet.Example.Prediction.Transforms
                 }
 
                 if (move != Vector3.zero)
-                {   
+                {
                     move = new Vector3(md.Horizontal, 90f, md.Vertical);
-                    
+
                     var rotationTemp = Quaternion.LookRotation(move);
                     //HairSit.transform.rotation = Quaternion.LookRotation(move);
                     //FaceSit.transform.rotation = Quaternion.LookRotation(move);
 
-                    
+
                     float eulerAngleY = rotationTemp.eulerAngles.y;
 
                     if (eulerAngleY > 0f && eulerAngleY < 22.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,0,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,0,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 0, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 0, 0);
                     }
                     if (eulerAngleY > 22.5f && eulerAngleY < 67.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,45,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,45,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 45, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 45, 0);
                     }
                     if (eulerAngleY > 67.5f && eulerAngleY < 112.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,90,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,90,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 90, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 90, 0);
                     }
                     if (eulerAngleY > 112.5f && eulerAngleY < 157.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,135,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,135,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 135, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 135, 0);
                     }
                     if (eulerAngleY > 157.5f && eulerAngleY < 202.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,180,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,180,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 180, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 180, 0);
                     }
                     if (eulerAngleY > 202.5f && eulerAngleY < 247.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,225,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,225,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 225, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 225, 0);
                     }
                     if (eulerAngleY > 247.5f && eulerAngleY < 292.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,270,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,270,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 270, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 270, 0);
                     }
                     if (eulerAngleY > 292.5f && eulerAngleY < 337.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,315,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,315,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 315, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 315, 0);
                     }
                     if (eulerAngleY > 337.5f && eulerAngleY < 360f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90,360,0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90,360,0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 360, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 360, 0);
                     }
-                    
+
 
                 }
 
-                
+
                 //Test
                 float rotationLookDirection = HairSit.transform.eulerAngles.y;
 
@@ -489,7 +492,7 @@ namespace FishNet.Example.Prediction.Transforms
                 {
                     oldLookDirection = rotationLookDirection;
                 }
-                
+
                 if (oldLookDirection + 67.5f < rotationLookDirection)
                 {
                     oldLookDirection = oldLookDirection + 45;
@@ -501,7 +504,7 @@ namespace FishNet.Example.Prediction.Transforms
                     transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
                 }
                 //TestEnd
-                
+
             }
 
             else
@@ -524,6 +527,18 @@ namespace FishNet.Example.Prediction.Transforms
                 {
                     transform.rotation = Quaternion.LookRotation(move);
                 }
+
+                if (!isMoving)
+                {
+                    int A = (int)this.transform.position.x;
+                    int B = (int)this.transform.position.z;
+                    Vector2 soll = new Vector2((float)A + 0.5f, (float)B + 0.5f);
+                    Vector3 ist = new Vector2(this.transform.position.x,this.transform.position.z);
+                    float different = Vector2.Distance(ist,soll);
+                    transform.position = new Vector3(soll.x, 0, soll.y);
+                }
+                
+
 
             }
 

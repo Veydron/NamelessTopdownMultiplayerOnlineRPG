@@ -2143,7 +2143,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 3241074286648262267}
   _networkObjectCache: {fileID: 3241074286648262267}
   targetPosition: {x: 0, y: 0, z: 0}
-  targetDistanceCheck: 0.2
+  targetDistanceCheck: 0.3
   isMoving: 0
   isSitting: 0
   _moveRate: 6
@@ -2196,10 +2196,10 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 3241074286648262267}
   IgnoredParameters: []
   _animator: {fileID: 3241074285797981917}
-  _smoothFloats: 1
+  _smoothFloats: 0
   _synchronizeInterval: 0.1
   _clientAuthoritative: 0
-  _sendToOwner: 1
+  _sendToOwner: 0
 --- !u!114 &-2737309773375283264
 MonoBehaviour:
   m_ObjectHideFlags: 0

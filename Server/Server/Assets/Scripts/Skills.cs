@@ -24,8 +24,11 @@ public class Skills : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.S) && base.IsOwner)
             {
                 Sit();
+                
                 //_transformPrediction.isSitting = !_transformPrediction.isSitting;
             }     
+
+            _animator.SetBool("Sit", _transformPrediction.isSitting);
     }
 
     [ServerRpc(RequireOwnership = true)]
