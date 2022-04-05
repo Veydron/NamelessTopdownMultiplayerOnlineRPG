@@ -29,6 +29,8 @@ namespace FishNet.Example.Prediction.Transforms
 
         private int oldLookDirection;
 
+        private CombatSystem _CB;
+
         [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f)]
         public bool isSitting;
         public void SittingDown(bool Value)
@@ -73,6 +75,7 @@ namespace FishNet.Example.Prediction.Transforms
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
+            _CB = this.gameObject.GetComponent<CombatSystem>();
 
             pathfinding = new Pathfinding(30, 30);
 
@@ -104,8 +107,12 @@ namespace FishNet.Example.Prediction.Transforms
 
             if (Input.GetMouseButton(0) && base.IsOwner)
             {
-                SetTargetPosition();
-                SearchPath();
+                if (_CB.ActiveTarget == CombatSystem.MouseTarget.TILE)
+                {
+                    SearchPath(_CB.targetTile);
+                }
+                //SetTargetPosition();
+                //SearchPath(targetPosition);
             }
             if (Input.GetKeyDown(KeyCode.Space) && base.IsOwner)
             {
@@ -123,8 +130,13 @@ namespace FishNet.Example.Prediction.Transforms
                 targetPosition = ray.GetPoint(point);
             }
         }
-        void SearchPath()
+        void SearchPath(Vector3 TargetTile)
         {
+            if (TargetTile == null){
+                return;
+            }
+            targetPosition = TargetTile;
+
             if (waypoints != null)
             {
                 if (waypointIndex > waypoints.Count - 1)

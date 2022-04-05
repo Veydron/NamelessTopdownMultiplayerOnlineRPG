@@ -20,6 +20,11 @@ public class PlayerAnimation : NetworkBehaviour
         _animator.SetTrigger("Jump");
     }
 
+    public void Attacking(bool value)
+    {
+        _animator.SetBool("Attacking", value);
+    }
+
     private void Update() {
         
     }
