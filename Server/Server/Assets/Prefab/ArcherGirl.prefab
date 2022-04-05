@@ -2054,6 +2054,7 @@ Transform:
   m_Children:
   - {fileID: 3241074286231444195}
   - {fileID: 3241074285403497845}
+  - {fileID: 8226574015248212502}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3752,3 +3753,93 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!1 &7789885174764395058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8226574015248212502}
+  - component: {fileID: 1409364044083884667}
+  m_Layer: 0
+  m_Name: EmoteBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8226574015248212502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789885174764395058}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3241074286648262262}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1409364044083884667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789885174764395058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d8d7c41f5547704ea98cfaf583a129f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _emotePrefab: {fileID: 1503789705351964, guid: 3a167aac508e88b4899f0ab9d4b15b9d, type: 3}
+  _popupAnimation: {fileID: 7400000, guid: b90de6331f642d84fb7b0e47190296af, type: 2}
+  _builtInSprites:
+  - {fileID: 21300010, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300054, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300064, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300058, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300030, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300032, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300020, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300000, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300036, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300006, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300040, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300002, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300060, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300038, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300014, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300008, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300018, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300024, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300028, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300044, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300004, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300048, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300052, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300016, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300046, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300068, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300070, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300050, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300026, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300012, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300066, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300042, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300034, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300062, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300056, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  - {fileID: 21300022, guid: 4bc604bf2b0e0c04389ce32748dfafee, type: 3}
+  _customSprites: []
+  _emoteOrigin: {fileID: 8226574015248212502}
+  _offset: {x: 0, y: 0, z: 0}
+  _scale: {x: 1, y: 1}
+  selectedTexture: 0
+  assetPaths:
+  - Assets/PopupEmote/Textures/AnimeEmotes.png
+  - Assets/PopupEmote/Textures/AnimeEmotesNoCaret.png
