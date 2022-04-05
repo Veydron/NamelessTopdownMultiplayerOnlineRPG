@@ -27,9 +27,9 @@ namespace FishNet.Example.Prediction.Transforms
 
         private GameObject FaceSit;
 
-        private float oldLookDirection;
+        private int oldLookDirection;
 
-        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.Observers, SendRate = 0f)]
+        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f)]
         public bool isSitting;
         public void SittingDown(bool Value)
         {
@@ -111,7 +111,7 @@ namespace FishNet.Example.Prediction.Transforms
             {
                 _playerAnimation.Jump();
             }
-             
+
         }
         void SetTargetPosition()
         {
@@ -427,15 +427,10 @@ namespace FishNet.Example.Prediction.Transforms
                 if (move != Vector3.zero)
                 {
                     move = new Vector3(md.Horizontal, 90f, md.Vertical);
-
                     var rotationTemp = Quaternion.LookRotation(move);
-                    //HairSit.transform.rotation = Quaternion.LookRotation(move);
-                    //FaceSit.transform.rotation = Quaternion.LookRotation(move);
-
-
                     float eulerAngleY = rotationTemp.eulerAngles.y;
 
-                    if (eulerAngleY > 0f && eulerAngleY < 22.5f)
+                    if (eulerAngleY > -22.5f && eulerAngleY < 22.5f)
                     {
                         HairSit.transform.rotation = Quaternion.Euler(-90, 0, 0);
                         FaceSit.transform.rotation = Quaternion.Euler(-90, 0, 0);
@@ -475,35 +470,139 @@ namespace FishNet.Example.Prediction.Transforms
                         HairSit.transform.rotation = Quaternion.Euler(-90, 315, 0);
                         FaceSit.transform.rotation = Quaternion.Euler(-90, 315, 0);
                     }
-                    if (eulerAngleY > 337.5f && eulerAngleY < 360f)
+                    if (eulerAngleY > 337.5f && eulerAngleY < 382.5f)
                     {
-                        HairSit.transform.rotation = Quaternion.Euler(-90, 360, 0);
-                        FaceSit.transform.rotation = Quaternion.Euler(-90, 360, 0);
+                        HairSit.transform.rotation = Quaternion.Euler(-90, 0, 0);
+                        FaceSit.transform.rotation = Quaternion.Euler(-90, 0, 0);
                     }
-
-
                 }
 
-
-                //Test
-                float rotationLookDirection = HairSit.transform.eulerAngles.y;
+                int pufferVar = Mathf.RoundToInt(HairSit.transform.eulerAngles.y);
+                int rotationLookDirection = pufferVar;
+                int fl = rotationLookDirection;
+                //Debug.Log("HairSit.Rot.Y: " + rotationLookDirection);
+                //Debug.Log("oldLookD: " + oldLookDirection);
 
                 if (oldLookDirection == 0)
                 {
-                    oldLookDirection = rotationLookDirection;
+                    if (fl == 90 || fl == 135 || fl == 180)
+                    {
+                        oldLookDirection = 45;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 270 || fl == 225)
+                    {
+                        oldLookDirection = 315;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
                 }
-
-                if (oldLookDirection + 67.5f < rotationLookDirection)
+                if (oldLookDirection == 45)
                 {
-                    oldLookDirection = oldLookDirection + 45;
-                    transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                    if (fl == 135 || fl == 180 || fl == 225)
+                    {
+                        oldLookDirection = 90;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 315 || fl == 270)
+                    {
+                        oldLookDirection = 0;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
                 }
-                if (oldLookDirection - 67.5 > rotationLookDirection)
+                if (oldLookDirection == 90)
                 {
-                    oldLookDirection = oldLookDirection - 45f;
-                    transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                    if (fl == 180 || fl == 225 || fl == 270)
+                    {
+                        oldLookDirection = 135;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 0 || fl == 315)
+                    {
+                        oldLookDirection = 45;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
                 }
-                //TestEnd
+                if (oldLookDirection == 135)
+                {
+                    if (fl == 225 || fl == 270 || fl == 315)
+                    {
+                        oldLookDirection = 180;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 45 || fl == 0)
+                    {
+                        oldLookDirection = 90;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                }
+                if (oldLookDirection == 180)
+                {
+                    if (fl == 270 || fl == 315 || fl == 0)
+                    {
+                        oldLookDirection = 225;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 90 || fl == 45)
+                    {
+                        oldLookDirection = 135;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                }
+                if (oldLookDirection == 225)
+                {
+                    if (fl == 315 || fl == 0 || fl == 45)
+                    {
+                        oldLookDirection = 270;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 135 || fl == 90)
+                    {
+                        oldLookDirection = 180;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                }
+                if (oldLookDirection == 270)
+                {
+                    if (fl == 0 || fl == 45 || fl == 90)
+                    {
+                        oldLookDirection = 315;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 180 || fl == 135)
+                    {
+                        oldLookDirection = 225;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                }
+                if (oldLookDirection == 315)
+                {
+                    if (fl == 45 || fl == 90 || fl == 135)
+                    {
+                        oldLookDirection = 0;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                    if (fl == 225 || fl == 180)
+                    {
+                        oldLookDirection = 270;
+                        transform.rotation = Quaternion.Euler(0, oldLookDirection, 0);
+                        return;
+                    }
+                }                  
 
             }
 
@@ -533,18 +632,11 @@ namespace FishNet.Example.Prediction.Transforms
                     int A = (int)this.transform.position.x;
                     int B = (int)this.transform.position.z;
                     Vector2 soll = new Vector2((float)A + 0.5f, (float)B + 0.5f);
-                    Vector3 ist = new Vector2(this.transform.position.x,this.transform.position.z);
-                    float different = Vector2.Distance(ist,soll);
+                    Vector3 ist = new Vector2(this.transform.position.x, this.transform.position.z);
+                    float different = Vector2.Distance(ist, soll);
                     transform.position = new Vector3(soll.x, 0, soll.y);
                 }
-                
-
-
             }
-
-
-
-
         }
 
         /// <summary>
