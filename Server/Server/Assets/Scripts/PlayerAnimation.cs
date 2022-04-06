@@ -22,6 +22,7 @@ public class PlayerAnimation : NetworkBehaviour
 
     public void Attacking(bool value)
     {
+
         _animator.SetBool("Attacking", value);
     }
 

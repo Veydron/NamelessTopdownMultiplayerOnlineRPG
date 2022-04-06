@@ -36,7 +36,7 @@ public class CombatSystem : NetworkBehaviour
     private int health;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _TF = this.gameObject.GetComponent<TransformPrediction>();
         _PA = this.gameObject.GetComponent<PlayerAnimation>();
@@ -122,7 +122,22 @@ public class CombatSystem : NetworkBehaviour
     }
 
     void AttackMode()
-    {
+    {   int cellDistanceToTarget = 0;
+        cellDistanceToTarget = _TF.CellCount(targetGameObject.transform.position);
+
+        Debug.Log(cellDistanceToTarget);
+        //var distanceToTarget = Vector2.Distance(new Vector2(this.transform.position.x,this.transform.position.z),new Vector2 (targetGameObject.transform.position.x,targetGameObject.transform.position.z));
+        if (cellDistanceToTarget > attackRange +2)
+        {
+            Debug.Log("CombatSystem: Distance to big");
+            _PA.Attacking(false);
+            RPCIdle();
+
+            GameEvents.current.PlayerWantPath(this.gameObject, attackRange, new Vector2 (targetGameObject.transform.position.x,targetGameObject.transform.position.z));
+            Debug.Log("CombatSystem: Request Path");
+            return;
+        }
+
         _PA.Attacking(true);
         RPCAttacking();
     }
@@ -131,6 +146,7 @@ public class CombatSystem : NetworkBehaviour
     [ServerRpc(RequireOwnership = true)]
     private void RPCIdle()
     {
+        _TF.isAttacking = false;
         OBSERVEIdle();
     }
     [ServerRpc(RequireOwnership = true)]
@@ -140,6 +156,8 @@ public class CombatSystem : NetworkBehaviour
         {
             return;
         }
+        _TF.AttackTarget = targetGameObject;
+        _TF.isAttacking = true;
         OBSERVEAttacking();
     }
 
@@ -147,11 +165,19 @@ public class CombatSystem : NetworkBehaviour
     [ObserversRpc(BufferLast = true, IncludeOwner = false)]
     private void OBSERVEIdle()
     {
+        if (_PA == null)
+        {
+            Debug.Log("_PA ist Null");
+            return;
+        }
+        _TF.isAttacking = false;
         _PA.Attacking(false);
     }
     [ObserversRpc(BufferLast = true, IncludeOwner = false)]
     private void OBSERVEAttacking()
     {
+        _TF.AttackTarget = targetGameObject;
+        _TF.isAttacking = true;
         _PA.Attacking(true);
     }
 

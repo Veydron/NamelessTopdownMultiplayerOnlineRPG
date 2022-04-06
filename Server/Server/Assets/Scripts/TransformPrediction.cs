@@ -4,6 +4,7 @@ using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
 using FishNet.Object.Synchronizing;
+using System;
 
 namespace FishNet.Example.Prediction.Transforms
 {
@@ -29,10 +30,14 @@ namespace FishNet.Example.Prediction.Transforms
 
         private int oldLookDirection;
 
+        private int wpReduction;
+
         private CombatSystem _CB;
 
-        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f)]
+        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f, OnChange = )]
         public bool isSitting;
+        public bool isAttacking;
+        public GameObject AttackTarget;
         public void SittingDown(bool Value)
         {
             ChangeObjectOnOff(Hair, !Value);
@@ -69,13 +74,15 @@ namespace FishNet.Example.Prediction.Transforms
 
         void Start()
         {
-
+            
         }
 
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
-            _CB = this.gameObject.GetComponent<CombatSystem>();
+
+
+            GameEvents.current.onPlayerWantPath += onPlayerWantPath;
 
             pathfinding = new Pathfinding(30, 30);
 
@@ -100,6 +107,17 @@ namespace FishNet.Example.Prediction.Transforms
             SittingDown(isSitting);
         }
 
+        private void onPlayerWantPath(GameObject Caller, int Range, Vector2 PathTarget){
+            if (Caller.name != this.name)
+            {
+                Debug.Log("TP GAMEOBJECT IS NOT SAME GAMEOBJECT ABORT");
+                return;
+            }
+            wpReduction = Range +1;
+            SearchPath(new Vector3(PathTarget.x,0,PathTarget.y));
+            Debug.Log("TP Player Want Path minus " + Range);
+        }
+
 
         void Update()
         {
@@ -109,6 +127,7 @@ namespace FishNet.Example.Prediction.Transforms
             {
                 if (_CB.ActiveTarget == CombatSystem.MouseTarget.TILE)
                 {
+                    wpReduction = 0;
                     SearchPath(_CB.targetTile);
                 }
                 //SetTargetPosition();
@@ -150,7 +169,20 @@ namespace FishNet.Example.Prediction.Transforms
                 waypoints = pathfinding.FindPath(transform.position, targetPosition);
             }
 
+            waypoints.RemoveRange(waypoints.Count - wpReduction, wpReduction);
+
+            if (waypoints == null)
+            {
+                return;
+            }
+
             waypointIndex = 0;
+        }
+
+        public int CellCount(Vector3 TargetTile)
+        {
+            var waypoints = pathfinding.FindPath(transform.position, TargetTile);
+            return waypoints.Count;
         }
 
 
@@ -222,10 +254,12 @@ namespace FishNet.Example.Prediction.Transforms
             InstanceFinder.TimeManager.OnTick += TimeManager_OnTick;
             InstanceFinder.TimeManager.OnUpdate += TimeManager_OnUpdate;
             _playerAnimation = GetComponent<PlayerAnimation>();
+            _CB = this.gameObject.GetComponent<CombatSystem>();
         }
 
         private void OnDestroy()
         {
+            GameEvents.current.onPlayerWantPath -= onPlayerWantPath;
             //Unsubscribe as well.
             if (InstanceFinder.TimeManager != null)
             {
@@ -634,11 +668,6 @@ namespace FishNet.Example.Prediction.Transforms
                     Debug.Log("B) Face IS null");
                 }
 
-                if (move != Vector3.zero)
-                {
-                    transform.rotation = Quaternion.LookRotation(move);
-                }
-
                 if (!isMoving)
                 {
                     int A = (int)this.transform.position.x;
@@ -647,6 +676,22 @@ namespace FishNet.Example.Prediction.Transforms
                     Vector3 ist = new Vector2(this.transform.position.x, this.transform.position.z);
                     float different = Vector2.Distance(ist, soll);
                     transform.position = new Vector3(soll.x, 0, soll.y);
+                }
+
+                if (isAttacking)
+                {
+                    //var temp = AttackTarget.transform.position;
+                    Debug.Log(AttackTarget.transform.position);
+                    //transform.rotation = Quaternion.LookRotation(AttackTarget.transform.position);
+                    Vector3 deltaVec = AttackTarget.transform.position - transform.position;
+                    Quaternion rotation = Quaternion.LookRotation(deltaVec);
+                    this.transform.rotation = rotation;
+                    return;
+                }
+
+                if (move != Vector3.zero)
+                {
+                    transform.rotation = Quaternion.LookRotation(move);
                 }
             }
         }

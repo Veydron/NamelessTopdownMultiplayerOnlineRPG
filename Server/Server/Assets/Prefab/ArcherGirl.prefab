@@ -2035,6 +2035,7 @@ GameObject:
   - component: {fileID: -380353553296961894}
   - component: {fileID: -8772308040954739339}
   - component: {fileID: 4653730691682970008}
+  - component: {fileID: -1765032564541141563}
   m_Layer: 10
   m_Name: ArcherGirl
   m_TagString: Player
@@ -2072,7 +2073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkObserver: {fileID: 0}
-  _prefabId: 10
+  _prefabId: 7
   _scenePathHash: 0
   _sceneId: 0
   _sceneNetworkObjects:
@@ -2264,6 +2265,25 @@ MonoBehaviour:
   _componentIndexCache: 7
   _addedNetworkObject: {fileID: 3241074286648262267}
   _networkObjectCache: {fileID: 3241074286648262267}
+  targetTile: {x: 0, y: 0, z: 0}
+  CharacterStateIs: 0
+  ActiveTarget: 0
+  attackSpeed: 2
+  attackRange: 2
+  weaponDamage: 40
+  maxHealth: 100
+--- !u!114 &-1765032564541141563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241074286648262270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d0177798899fb143ae9fc21f394dd0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3241074286664332062
 GameObject:
   m_ObjectHideFlags: 0
