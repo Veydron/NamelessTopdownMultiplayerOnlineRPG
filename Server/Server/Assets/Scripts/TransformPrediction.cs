@@ -34,7 +34,7 @@ namespace FishNet.Example.Prediction.Transforms
 
         private CombatSystem _CB;
 
-        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f, OnChange = )]
+        [SyncVar(Channel = Transporting.Channel.Unreliable, ReadPermissions = ReadPermission.OwnerOnly, SendRate = 0f)]
         public bool isSitting;
         public bool isAttacking;
         public GameObject AttackTarget;
